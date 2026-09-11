@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
+  <title>{{ couple }} — دعواتكم</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,28 +12,26 @@
 <body>
   <div class="stage">
     <div class="story">
-      <div class="inner">
+      <div class="inner form-only">
 
-        <div class="header">
        
-        </div>
 
         <form class="card" method="POST" action="{{ url_for('index') }}">
           {% if error %}<div class="error">{{ error }}</div>{% endif %}
 
           <div class="field">
-            <label for="name">اسمك</label>
+            <label for="name">اسمكِ</label>
             <input type="text" id="name" name="name" maxlength="80"
-                   placeholder="مثال: أبو محمد" value="{{ name or '' }}" required>
+                   placeholder="اكتبي اسمكِ" value="{{ name or '' }}" required>
           </div>
 
           <div class="field">
-            <label for="message">كلمتك</label>
+            <label for="message">دعوتكِ أو كلمتكِ</label>
             <textarea id="message" name="message" maxlength="1000"
-                      placeholder="اكتب تهنئتك أو دعوتك للعروسين…" required>{{ message or '' }}</textarea>
+                      placeholder="اكتبي تهنئتكِ ودعوتكِ للعروسين…" required>{{ message or '' }}</textarea>
           </div>
 
-          <button type="submit" class="btn">أرسل كلمتك</button>
+          <button type="submit" class="btn">أرسلي كلمتكِ</button>
         </form>
 
       </div>

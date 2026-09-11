@@ -36,7 +36,7 @@ html, body {
   max-height: calc(100dvh - 32px);
   overflow: hidden;
   border-radius: 18px;
-  background-image: var(--bg, url("/static/bg.jpeg"));
+  background-image: var(--bg, url("/static/background.jpg"));
   background-size: cover;
   background-position: center;
   box-shadow: 0 30px 80px -30px rgba(0,0,0,0.8);
@@ -177,7 +177,7 @@ textarea { resize: none; min-height: 84px; line-height: 1.6; }
 }
 
 /* ===== صفحة الشكر ===== */
-.thanks .inner { justify-content: center; gap: 8px; }
+.thanks-block { width: 100%; }
 .seal {
   width: 78px; height: 78px;
   margin: 0 auto 22px;
@@ -307,3 +307,17 @@ textarea { resize: none; min-height: 84px; line-height: 1.6; }
 }
 .login-card p { color: var(--ivory-dim); font-size: 0.9rem; margin-bottom: 20px; }
 .login-card .btn { margin-top: 6px; }
+
+/* ===== وضع النموذج فقط (الترويسة مطبوعة داخل الصورة) ===== */
+.inner.form-only {
+  justify-content: flex-end;
+  padding-top: 40px;
+  padding-bottom: 96px; /* مساحة لتوقيع Mk.events أسفل الصورة */
+  gap: 14px;
+}
+.prompt {
+  color: var(--gold);
+  font-size: 1.06rem;
+  margin-bottom: 2px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.55);
+}
