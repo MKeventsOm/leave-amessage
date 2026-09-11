@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كلمات الضيوف</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-head">
+      <div>
+        <h1>كلمات الضيوف</h1>
+        <div class="count">{{ count }} كلمة — {{ couple }}</div>
+      </div>
+      <a class="logout" href="{{ url_for('admin_logout') }}">خروج</a>
+    </div>
+
+    {% if messages %}
+      {% for m in messages %}
+        <div class="msg">
+          <div class="msg-top">
+            <span class="msg-name">{{ m['name'] }}</span>
+            <span class="msg-date">{{ m['created_at'] }}</span>
+          </div>
+          <div class="msg-body">{{ m['message'] }}</div>
+          <form method="POST" action="{{ url_for('delete_message', msg_id=m['id']) }}"
+                onsubmit="return confirm('حذف كلمة {{ m['name'] }}؟');">
+            <button type="submit" class="del">حذف</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">لا توجد كلمات بعد — شارك الرابط مع الضيوف وبتظهر هنا.</div>
+    {% endif %}
+  </div>
+</body>
+</html>

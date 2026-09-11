@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>شكراً {{ name }} 🤍</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="stage">
+    <div class="story thanks">
+      <div class="inner">
+        <div>
+       
+          <p>كلماتك وصلتنا</p>
+          <h1>شكراً <span class="thanks-name">{{ name }}</span></h1>
+          <p>تهنئتك صارت جزءاً من ذكرى هذا اليوم،<br>وبتبقى محفوظة عند العروسين.</p>
+          <a class="back-link" href="{{ url_for('index') }}">أضف كلمة أخرى</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

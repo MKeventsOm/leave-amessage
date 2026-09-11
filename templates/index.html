@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="stage">
+    <div class="story">
+      <div class="inner">
+
+        <div class="header">
+       
+        </div>
+
+        <form class="card" method="POST" action="{{ url_for('index') }}">
+          {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+          <div class="field">
+            <label for="name">اسمك</label>
+            <input type="text" id="name" name="name" maxlength="80"
+                   placeholder="مثال: أبو محمد" value="{{ name or '' }}" required>
+          </div>
+
+          <div class="field">
+            <label for="message">كلمتك</label>
+            <textarea id="message" name="message" maxlength="1000"
+                      placeholder="اكتب تهنئتك أو دعوتك للعروسين…" required>{{ message or '' }}</textarea>
+          </div>
+
+          <button type="submit" class="btn">أرسل كلمتك</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>
