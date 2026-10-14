@@ -3,39 +3,122 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ebece7">
   <title>{{ couple }} — دعواتكم</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="{{ url_for('static', filename='img/bg.jpg') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="stage">
-    <div class="story">
-      <div class="inner form-only">
+  <main class="stage">
+    <div class="content">
 
-       
-
-        <form class="card" method="POST" action="{{ url_for('index') }}">
-          {% if error %}<div class="error">{{ error }}</div>{% endif %}
-
-          <div class="field">
-            <label for="name">اسمكِ</label>
-            <input type="text" id="name" name="name" maxlength="80"
-                   placeholder="اكتبي اسمكِ" value="{{ name or '' }}" required>
+      {% if slides %}
+      <section class="slider" data-slider aria-roledescription="carousel" aria-label="صور العروسين">
+        <div class="arch">
+          <div class="arch-inner">
+            {% for s in slides %}
+              {% if loop.index <= 2 %}
+              <img class="slide{% if loop.first %} is-active{% endif %}" src="{{ s }}" alt="" decoding="async">
+              {% else %}
+              <img class="slide" data-src="{{ s }}" alt="" decoding="async">
+              {% endif %}
+            {% endfor %}
           </div>
+        </div>
+        {% if slides|length > 1 %}
+        <div class="dots">
+          {% for s in slides %}
+          <button type="button" class="dot{% if loop.first %} is-active{% endif %}"
+                  aria-label="الصورة {{ loop.index }}"{% if loop.first %} aria-current="true"{% endif %}></button>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </section>
+      {% endif %}
 
-          <div class="field">
-            <label for="message">دعوتكِ أو كلمتكِ</label>
-            <textarea id="message" name="message" maxlength="1000"
-                      placeholder="اكتبي تهنئتكِ ودعوتكِ للعروسين…" required>{{ message or '' }}</textarea>
-          </div>
+      <h1 class="phrase">
+        <img src="{{ url_for('static', filename='img/phrase.png') }}"
+             alt="أغمرونا بدعواتكم الصادقة" width="808" height="150">
+      </h1>
 
-          <button type="submit" class="btn">أرسلي كلمتكِ</button>
-        </form>
+      <form class="card" method="POST" action="{{ url_for('index') }}">
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
 
-      </div>
+        <div class="field">
+          <label for="name">اسمكِ</label>
+          <input type="text" id="name" name="name" maxlength="80" autocomplete="name"
+                 placeholder="اكتبي اسمكِ" value="{{ name or '' }}" required>
+        </div>
+
+        <div class="field">
+          <label for="message">دعوتكِ أو كلمتكِ</label>
+          <textarea id="message" name="message" maxlength="1000" rows="4"
+                    placeholder="اكتبي تهنئتكِ ودعوتكِ للعروسين…" required>{{ message or '' }}</textarea>
+        </div>
+
+        <button type="submit" class="btn">أرسلي كلمتكِ</button>
+      </form>
+
     </div>
-  </div>
+  </main>
+
+  <script>
+  (function () {
+    var root = document.querySelector('[data-slider]');
+    if (!root) return;
+    var slides = Array.prototype.slice.call(root.querySelectorAll('.slide'));
+    var dots = Array.prototype.slice.call(root.querySelectorAll('.dot'));
+    if (slides.length < 2) return;
+
+    var DELAY = 4500;
+    var current = 0, timer = null;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function load(n) {
+      var s = slides[(n + slides.length) % slides.length];
+      if (s.dataset.src) { s.src = s.dataset.src; s.removeAttribute('data-src'); }
+    }
+
+    function go(n) {
+      n = (n + slides.length) % slides.length;
+      if (n === current) return;
+      load(n);
+      slides[current].classList.remove('is-active');
+      if (dots[current]) { dots[current].classList.remove('is-active'); dots[current].removeAttribute('aria-current'); }
+      current = n;
+      slides[current].classList.add('is-active');
+      if (dots[current]) { dots[current].classList.add('is-active'); dots[current].setAttribute('aria-current', 'true'); }
+      load(current + 1);
+    }
+
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function start() { stop(); if (!reduce) timer = setInterval(function () { go(current + 1); }, DELAY); }
+
+    dots.forEach(function (d, n) {
+      d.addEventListener('click', function () { go(n); start(); });
+    });
+
+    // السحب بالإصبع: يمين = الصورة التالية (اتجاه عربي)، يسار = السابقة
+    var frame = root.querySelector('.arch'), x0 = null, y0 = null;
+    frame.addEventListener('touchstart', function (e) {
+      x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+    }, { passive: true });
+    frame.addEventListener('touchend', function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { go(current + (dx > 0 ? 1 : -1)); start(); }
+      x0 = y0 = null;
+    }, { passive: true });
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop(); else start();
+    });
+
+    start();
+  })();
+  </script>
 </body>
 </html>

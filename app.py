@@ -13,7 +13,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "change-this-secret-key")
 
 # --- الإعدادات (تتحكم فيها من المتغيرات البيئية على Railway) ---
 # أسماء العروسين والعنوان اللي يطلع فوق الصفحة
-COUPLE_NAME = os.environ.get("COUPLE_NAME", "سالم & نورة")
+COUPLE_NAME = os.environ.get("COUPLE_NAME", "يوسف و رنا")
 EVENT_TITLE = os.environ.get("EVENT_TITLE", "كلمات الأحبّة")
 EVENT_SUBTITLE = os.environ.get("EVENT_SUBTITLE", "اكتب كلمة تبقى ذكرى")
 
@@ -23,6 +23,24 @@ ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin1234")
 # مجلد حفظ قاعدة البيانات (خله يشير لـ volume على Railway حتى ما تنمسح الرسائل)
 DATA_DIR = os.environ.get("DATA_DIR", ".")
 DB_PATH = os.path.join(DATA_DIR, "messages.db")
+
+# صور السلايدر: حط صورك في مجلد static/slides وبتطلع تلقائياً (مرتبة حسب اسم الملف)
+# الصور اللي تبدأ بـ _sample تطلع بس إذا المجلد ما فيه صور حقيقية
+SLIDES_DIR = os.path.join(app.static_folder, "slides")
+SLIDE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif"}
+
+
+def get_slides():
+    try:
+        files = sorted(
+            f for f in os.listdir(SLIDES_DIR)
+            if os.path.splitext(f)[1].lower() in SLIDE_EXTS
+        )
+    except FileNotFoundError:
+        return []
+    real = [f for f in files if not f.startswith("_")]
+    chosen = real or [f for f in files if f.startswith("_sample")]
+    return [url_for("static", filename=f"slides/{f}") for f in chosen]
 
 
 def get_db():
@@ -75,6 +93,7 @@ def index():
                 error="اكتب اسمك وكلمتك قبل الإرسال",
                 name=name,
                 message=message,
+                slides=get_slides(),
                 **config(),
             )
 
@@ -86,7 +105,7 @@ def index():
         db.commit()
         return render_template("thanks.html", name=name, **config())
 
-    return render_template("index.html", **config())
+    return render_template("index.html", slides=get_slides(), **config())
 
 
 # ---------- صفحة الإدارة ----------

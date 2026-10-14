@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ebece7">
   <title>شكراً {{ name }} 🤍</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,17 +11,16 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="stage">
-    <div class="story thanks">
-      <div class="inner form-only">
-        <div class="thanks-block">
-          <p>دعواتكِ وصلتنا</p>
-          <h1>شكراً <span class="thanks-name">{{ name }}</span></h1>
-          <p>دعوتكِ صارت جزءاً من ذكرى هذا اليوم،<br>وبتبقى محفوظة عند العروسين.</p>
-          <a class="back-link" href="{{ url_for('index') }}">أضيفي كلمة أخرى</a>
-        </div>
+  <main class="stage">
+    <div class="content">
+      <div class="thanks-block">
+        <span class="ornament" aria-hidden="true"></span>
+        <p class="thanks-kicker">دعواتكِ وصلتنا</p>
+        <h1>شكراً <span class="thanks-name">{{ name }}</span></h1>
+        <p>دعوتكِ صارت جزءاً من ذكرى هذا اليوم،<br>وبتبقى محفوظة عند العروسين.</p>
+        <a class="back-link" href="{{ url_for('index') }}">أضيفي كلمة أخرى</a>
       </div>
     </div>
-  </div>
+  </main>
 </body>
 </html>

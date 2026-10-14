@@ -28,7 +28,7 @@
           </div>
           <div class="msg-body">{{ m['message'] }}</div>
           <form method="POST" action="{{ url_for('delete_message', msg_id=m['id']) }}"
-                onsubmit="return confirm('حذف كلمة {{ m['name'] }}؟');">
+                onsubmit='return confirm("حذف كلمة " + {{ m["name"]|tojson }} + "؟");'>
             <button type="submit" class="del">حذف</button>
           </form>
         </div>
